@@ -17,6 +17,14 @@
             <input type="number" step="0.01" class="form-control" id="preco" name="preco" value="{{ old('preco', $produto->preco) }}" required>
         </div>
 
+        <div class="mb-3">
+            <label for="imagem" class="form-label">Imagem do Produto</label>
+            <input type="file" name="imagem" id="imagem" class="form-control" accept=".jpeg,.jpg,.png,.gif,.svg,.webp,image/*">
+            <small class="form-text text-muted">Formatos aceitos: jpeg, jpg, png, gif, svg, webp</small>
+            @if($errors->has('imagem'))
+            <div class="text-danger mt-1">{{ $errors->first('imagem') }}</div>
+            @endif
+        </div>
         <h4>Variações e Estoque</h4>
 
         <div id="estoques-existentes">
@@ -43,11 +51,11 @@
 </div>
 
 <script>
-document.getElementById('add-nova-variacao').addEventListener('click', function() {
-    const container = document.getElementById('novas-variacoes-container');
-    const newRow = document.createElement('div');
-    newRow.classList.add('row', 'mb-2');
-    newRow.innerHTML = `
+    document.getElementById('add-nova-variacao').addEventListener('click', function() {
+        const container = document.getElementById('novas-variacoes-container');
+        const newRow = document.createElement('div');
+        newRow.classList.add('row', 'mb-2');
+        newRow.innerHTML = `
         <div class="col">
             <input type="text" name="novas_variacoes[]" class="form-control" placeholder="Variação (ex: Tamanho G)">
         </div>
@@ -55,7 +63,7 @@ document.getElementById('add-nova-variacao').addEventListener('click', function(
             <input type="number" name="novas_quantidades[]" class="form-control" placeholder="Quantidade" min="0">
         </div>
     `;
-    container.appendChild(newRow);
-});
+        container.appendChild(newRow);
+    });
 </script>
 @endsection

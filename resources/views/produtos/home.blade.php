@@ -43,6 +43,21 @@
         @empty
         <p class="text-center">Nenhum produto disponível no momento.</p>
         @endforelse
+        @php
+        $carrinho = session('carrinho', []);
+        $quantidadeTotal = collect($carrinho)->sum(fn($item) => $item['quantidade']);
+        @endphp
+
+        <a href="{{ route('carrinho.index') }}"
+            class="btn btn-primary position-fixed top-0 end-0 m-3 d-flex align-items-center shadow"
+            style="z-index: 1050; border-radius: 50px; padding: 0.5rem 1rem; min-width: 120px;">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-fill me-2" viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 14H4a.5.5 0 0 1-.491-.408L1.01 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+            </svg>
+
+            Carrinho ({{ $quantidadeTotal }})
+        </a>
     </div>
 </div>
 @endsection

@@ -1,15 +1,14 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container py-4">
     <h1 class="mb-4 text-center">🛒 Carrinho de Compras</h1>
 
     {{-- Mensagens --}}
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success">{{ session('success') }}</div>
     @endif
     @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
+    <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
     @if(count($carrinho) === 0)
@@ -20,17 +19,18 @@
         <div class="card mb-4">
             <div class="card-body">
                 <h5>🎟 Aplicar Cupom</h5>
-                <form action="{{ route('carrinho.aplicarCupom') }}" method="POST">
+                <form action="{{ route('carrinho.aplicarCupom') }}" method="POST" class="d-flex gap-2">
                     @csrf
-                    <div class="row g-2">
-                        <div class="col-md-4">
-                            <input type="text" name="cupom" class="form-control" placeholder="Digite o código do cupom">
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-outline-primary">Aplicar</button>
-                        </div>
-                    </div>
+                    <input type="text" name="cupom" class="form-control" placeholder="Digite o código do cupom">
+                    <button class="btn btn-outline-primary">Aplicar</button>
                 </form>
+
+                @if($cupom)
+                <form action="{{ route('carrinho.removerCupom') }}" method="POST" class="mt-2">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Remover cupom</button>
+                </form>
+                @endif
             </div>
         </div>
 
@@ -47,16 +47,24 @@
                                 <th>Quantidade</th>
                                 <th>Preço Unitário</th>
                                 <th>Subtotal</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($carrinho as $item)
+                            @foreach($carrinho as $key => $item)
                             <tr>
                                 <td>{{ $item['nome'] }}</td>
                                 <td>{{ $item['variacao'] }}</td>
                                 <td>{{ $item['quantidade'] }}</td>
                                 <td>R$ {{ number_format($item['preco'], 2, ',', '.') }}</td>
                                 <td>R$ {{ number_format($item['preco'] * $item['quantidade'], 2, ',', '.') }}</td>
+                                <td>
+                                    <form action="{{ route('carrinho.remover', $key) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger">Remover</button>
+                                    </form>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -75,19 +83,10 @@
                         <strong>R$ {{ number_format($subtotal, 2, ',', '.') }}</strong>
                     </li>
 
-                    @if(session('cupom'))
+                    @if($cupom)
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>
-                            Cupom <strong>{{ session('cupom')->codigo }}</strong> aplicado:
-                        </span>
-                        <strong class="text-success">
-                            - R$
-                            @if(session('cupom')->eh_percentual)
-                                {{ number_format(($subtotal * session('cupom')->desconto / 100), 2, ',', '.') }}
-                            @else
-                                {{ number_format(session('cupom')->desconto, 2, ',', '.') }}
-                            @endif
-                        </strong>
+                        <span>Cupom <strong>{{ $cupom->codigo }}</strong> aplicado:</span>
+                        <strong class="text-success">- R$ {{ number_format($desconto, 2, ',', '.') }}</strong>
                     </li>
                     @endif
 
@@ -149,7 +148,7 @@
 
 {{-- ViaCEP --}}
 <script>
-    document.getElementById('cep').addEventListener('blur', function () {
+    document.getElementById('cep').addEventListener('blur', function() {
         const cep = this.value.replace(/\D/g, '');
         if (cep.length !== 8) return;
 
