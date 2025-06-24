@@ -2,7 +2,12 @@
 
 @section('content')
 <div class="container py-4">
-    <h1 class="mb-4 text-center">Montink</h1>
+    <h1 class="mb-4 text-center d-flex justify-content-between align-items-center">
+        Montink
+        <a href="{{ route('produtos.create') }}" class="btn btn-success btn-sm">
+            + Adicionar Produto
+        </a>
+    </h1>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @forelse ($produtos as $produto)
@@ -43,6 +48,7 @@
         @empty
         <p class="text-center">Nenhum produto disponível no momento.</p>
         @endforelse
+
         @php
         $carrinho = session('carrinho', []);
         $quantidadeTotal = collect($carrinho)->sum(fn($item) => $item['quantidade']);

@@ -8,13 +8,15 @@
     @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered align-middle">
             <thead>
                 <tr>
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Variações / Estoque</th>
+                    <th>Comprar</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -24,29 +26,32 @@
                     <td>{{ $produto->nome }}</td>
                     <td>R$ {{ number_format($produto->preco, 2, ',', '.') }}</td>
                     <td>
-                        <ul>
+                        <ul class="mb-0" style="list-style: none; padding-left: 0;">
                             @foreach($produto->estoques as $estoque)
-                            <li>{{ $estoque->variacao ?? 'Sem variação' }} — {{ $estoque->quantidade }}</li>
+                            <li><strong>{{ $estoque->variacao ?? 'Sem variação' }}</strong> — {{ $estoque->quantidade }}</li>
                             @endforeach
                         </ul>
                     </td>
                     <td>
-                        <a href="{{ route('produtos.edit', $produto) }}" class="btn btn-sm btn-warning">Editar</a>
-                        <form action="{{ route('carrinho.adicionar') }}" method="POST" class="d-flex mt-2">
+                        <form action="{{ route('carrinho.adicionar') }}" method="POST" class="d-flex gap-2">
                             @csrf
                             <input type="hidden" name="produto_id" value="{{ $produto->id }}">
-                            <select name="variacao" class="form-select form-select-sm me-2" required>
-                                <option value="" disabled selected>Escolha a variação</option>
+                            <select name="variacao" class="form-select form-select-sm" required>
+                                <option value="" disabled selected>Escolha</option>
                                 @foreach($produto->estoques as $estoque)
-                                <option value="{{ $estoque->variacao }}">{{ $estoque->variacao }} ({{ $estoque->quantidade }})</option>
+                                <option value="{{ $estoque->variacao }}">
+                                    {{ $estoque->variacao }} ({{ $estoque->quantidade }})
+                                </option>
                                 @endforeach
                             </select>
                             <button type="submit" class="btn btn-sm btn-success">Comprar</button>
                         </form>
                     </td>
+                    <td>
+                        <a href="{{ route('produtos.edit', $produto) }}" class="btn btn-sm btn-warning">Editar</a>
+                    </td>
                 </tr>
                 @endforeach
-
             </tbody>
         </table>
     </div>

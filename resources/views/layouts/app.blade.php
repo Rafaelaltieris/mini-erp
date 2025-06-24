@@ -22,7 +22,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Produtos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Loja</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('produtos.index') }}">Produtos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('cupons.index') }}">Cupons</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('carrinho.index') }}">Carrinho</a></li>
 
