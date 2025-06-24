@@ -1,3 +1,4 @@
+<?php
 use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdutoController;
@@ -24,5 +25,5 @@ Route::post('/carrinho/remover-cupom', [CarrinhoController::class, 'removerCupom
 // Cupons (gerenciamento)
 Route::resource('cupons', CupomController::class);
 
-// Webhook Parte Extra
-# Route::post('/webhook/pedido', [WebhookController::class, 'receber'])->middleware('webhook.auth');
+// // Webhook Parte Extra
+// # Route::post('/webhook/pedido', [WebhookController::class, 'receber'])->middleware('webhook.auth'); -->
