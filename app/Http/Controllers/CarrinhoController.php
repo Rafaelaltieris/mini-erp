@@ -12,21 +12,17 @@ class CarrinhoController extends Controller
     {
         $codigo = $request->input('cupom');
 
-        // Exemplo simples de buscar cupom pelo código no banco
         $cupom = \App\Models\Cupom::where('codigo', $codigo)->first();
 
         if (!$cupom) {
             return redirect()->back()->with('error', 'Cupom inválido.');
         }
 
-        // Você pode validar outras regras, como data de validade, uso único, etc.
-
-        // Salva o cupom na sessão para aplicar desconto na view
         session(['cupom' => $cupom]);
 
         return redirect()->back()->with('success', "Cupom '{$codigo}' aplicado com sucesso!");
     }
-    
+
     public function adicionar(Request $request)
     {
         $produtoId = $request->produto_id;
